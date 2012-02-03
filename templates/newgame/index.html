@@ -1,0 +1,63 @@
+<html>
+<head>
+<title>New Game | SHIRItori</title>
+<link href="/static/css/bootstrap.min.css" rel="stylesheet">
+<link href="/static/css/bootstrap-responsive.min.css" rel="stylesheet">
+<link href="/static/css/docs.css" rel="stylesheet">
+</head>
+<body data-spy="scroll" data-target=".subnav" data-offset="50">
+<!-- Navbar -->
+<div class="navbar navbar-fixed-top">
+  <div class="navbar-inner">
+    <div class="container">
+      <a class="brand" href="/"><img src="/static/img/logo_small_white.png"></a>
+      <div class="nav-collapse">
+      <ul class="nav">
+        <li class="">
+          <a href="/">Home</a>
+        </li>
+        <li class="active">
+          <a href="/newgame/">New Game</a>
+        </li>
+      </ul>
+      </div><!-- /nav-collapse -->
+    </div><!-- /container -->
+  </div><!-- /navbar-inner -->
+</div><!-- /navbar -->
+
+<div class="container">
+<header class="jumbotron subhead">
+  <h1>Create New Game</h1>
+  <p class="lead">新しいしりとりゲームをつくるよ</p>
+</header>
+
+<hr>
+
+<div class="new-game">
+  <div class="alert alert-info">
+    現在 {{ game_number }} 個のゲームが進行中だよ！
+  </div><!-- /alert info -->
+  {% if error_message %}
+  <div class="alert alert-error">
+    {{ error_message }}
+  </div><!-- /alert error -->
+  {% endif %}
+  <form class="well" action="/newgame/create/" method="post">
+    {% csrf_token %}
+    <label>Choose your name</label>
+    <input type="text" name="player_name" class="span4"><br>
+    <button type="submit" class="btn btn-large btn-primary">Create New Game</button>
+    <button type="reset" class="btn btn-large">Cancel</button>
+  </form>
+</div><!-- /new-game -->
+
+<footer class="footer">
+  <p class="pull-right"><a href="#">Back to top</a></p>
+</footer>
+</div><!-- /container -->
+
+<!-- JavaScript -->
+<script src="/static/js/jquery-1.7.1.min.js"></script>
+<script src="/static/js/bootstrap.min.js"></script>
+</body>
+</html>

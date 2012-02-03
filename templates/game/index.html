@@ -1,0 +1,102 @@
+<html>
+<head>
+<title>Game | SHIRItori</title>
+<link href="/static/css/bootstrap.min.css" rel="stylesheet">
+<link href="/static/css/bootstrap-responsive.min.css" rel="stylesheet">
+<link href="/static/css/docs.css" rel="stylesheet">
+</head>
+<body data-spy="scroll" data-target=".subnav" data-offset="50">
+<!-- Navbar -->
+<div class="navbar navbar-fixed-top">
+  <div class="navbar-inner">
+    <div class="container">
+      <a class="brand" href="/"><img src="/static/img/logo_small_white.png"></a>
+      <div class="nav-collapse">
+      <ul class="nav">
+        <li class="">
+          <a href="/">Home</a>
+        </li>
+        <li class="">
+          <a href="/newgame/">New Game</a>
+        </li>
+      </ul>
+      </div><!-- /nav-collapse -->
+    </div><!-- /container -->
+  </div><!-- /navbar-inner -->
+</div><!-- /navbar -->
+
+<div class="container">
+<header class="jumbotron subhead">
+  <h1>Room {{ game.id }}</h1>
+</header>
+
+<hr>
+
+<div class="game">
+  <div class="row">
+    <div class="span9">
+      <p><canvas id="gamecanvas" width="680" height="400"></canvas></p>
+      <p>
+        <div class="btn-toolbar">
+          <button class="btn btn-large success" data-toggle="button">あ</button>
+          <button class="btn btn-large success" data-toggle="button">あ</button>
+          <button class="btn btn-large success" data-toggle="button">あ</button>
+          <button class="btn btn-large success" data-toggle="button">あ</button>
+          <button class="btn btn-large success" data-toggle="button">あ</button>
+          <button class="btn btn-large success" data-toggle="button">あ</button>
+          <button class="btn btn-large success" data-toggle="button">あ</button>
+          <button class="btn btn-large success" data-toggle="button">あ</button>
+          <button class="btn btn-large success" data-toggle="button">あ</button>
+          <button class="btn btn-large success" data-toggle="button">あ</button>
+          <button class="btn btn-large success" data-toggle="button">あ</button>
+          <button class="btn btn-large success" data-toggle="button">あ</button>
+          <button class="btn btn-large success" data-toggle="button">あ</button>
+          <button class="btn btn-large success" data-toggle="button">←</button>
+        </div><!-- /button-toolbar -->
+        <div class="btn-toolbar">
+          <button class="btn btn-large success" data-toggle="button">あ</button>
+          <button class="btn btn-large success" data-toggle="button">あ</button>
+          <button class="btn btn-large success" data-toggle="button">あ</button>
+          <button class="btn btn-large success" data-toggle="button">あ</button>
+          <button class="btn btn-large success" data-toggle="button">あ</button>
+          <button class="btn btn-large success" data-toggle="button">あ</button>
+          <button class="btn btn-large success" data-toggle="button">あ</button>
+          <button class="btn btn-large success" data-toggle="button">あ</button>
+          <button class="btn btn-large success" data-toggle="button">あ</button>
+          <button class="btn btn-large success" data-toggle="button">あ</button>
+          <button class="btn btn-large success" data-toggle="button">あ</button>
+          <button class="btn btn-large success" data-toggle="button">あ</button>
+          <button class="btn btn-large success" data-toggle="button">あ</button>
+          <button class="btn btn-large success" data-toggle="button">→</button>
+        </div><!-- /button-toolbar -->
+      </p>
+    </div><!-- /span9 -->
+    <div class="span3 player-list">
+      <h3>Players in this room</h3>
+      <p><i class="icon-user"></i><span class="you">{{ player.name }} さん</span></p>
+      {% if player_list %}
+      {% for x in player_list %}
+      <p><i class="icon-user"></i>{{ x.name }} さん</p>
+      {% endfor %}
+      {% endif %}
+    </div><!-- /span3 -->
+  </div><!-- /row -->
+</div><!-- /game -->
+
+<footer class="footer">
+  <p class="pull-right"><a href="#">Back to top</a></p>
+</footer>
+</div><!-- /container -->
+
+<!-- JavaScript -->
+<script src="/static/js/jquery-1.7.1.min.js"></script>
+<script src="/static/js/bootstrap.min.js"></script>
+<script type="text/javascript">
+// 680 * 400
+var c = document.getElementById("gamecanvas");
+var ctx = c.getContext("2d");
+ctx.fillStyle = "#dff0d8";
+ctx.fillRect(0, 0, 680, 400);
+</script>
+</body>
+</html>
