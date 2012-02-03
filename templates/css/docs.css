@@ -81,9 +81,6 @@ hr.soften {
 }
 
 /* Game List */
-.game-list .row {
-  margin-bottom: 9px;
-}
 .game-list h1 {
   margin: 36px 0 27px;
   font-size: 40px;
@@ -96,11 +93,10 @@ hr.soften {
 }
 .game-list h2 {
   font-size: 22px;
-  margin-left: 20px;
 }
 .game-list p {
   margin-right: 10px;
-  margin-left: 40px;
+  margin-left: 20px;
 }
 .game-list .bs-icon {
   float: left;
@@ -111,12 +107,28 @@ hr.soften {
   float: left;
   margin: 4px 5px 0 0;
 }
-
-.game-list .span4 {
+.show-grid {
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
+.show-grid .span3 {
   background-color: #eee;
   -webkit-border-radius: 3px;
      -moz-border-radius: 3px;
           border-radius: 3px;
+  min-height: 30px;
+  line-height: 30px;
+}
+.show-grid .span2 {
+  min-height: 30px;
+  line-height: 30px;
+}
+.rooms {
+  margin: 20px;
+}
+
+/** newgame **/
+.new-game .span3 {
   min-height: 30px;
   line-height: 30px;
 }

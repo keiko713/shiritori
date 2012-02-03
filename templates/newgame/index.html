@@ -42,12 +42,11 @@
     {{ error_message }}
   </div><!-- /alert error -->
   {% endif %}
-  <form class="well" action="/newgame/create/" method="post">
+  <form class="well form-inline" action="/newgame/create/" method="post">
     {% csrf_token %}
-    <label>Choose your name</label>
-    <input type="text" name="player_name" class="span4"><br>
-    <button type="submit" class="btn btn-large btn-primary">Create New Game</button>
-    <button type="reset" class="btn btn-large">Cancel</button>
+    <label>Choose your name: </label>
+    <input type="text" name="player_name" class="span3" placeholder="Name">
+    <button type="submit" class="btn btn-primary">Create New Game</button>
   </form>
 </div><!-- /new-game -->
 
