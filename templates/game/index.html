@@ -33,45 +33,31 @@
 <hr>
 
 <div class="game">
+  {% if error_message %}
+  <div class="alert alert-error">
+    {{ error_message }}
+  </div>
+  {% endif %}
   <div class="row">
     <div class="span9">
-      <p><canvas id="gamecanvas" width="680" height="400"></canvas></p>
-      <p>
-        <div class="btn-toolbar">
-          <button class="btn btn-large success" data-toggle="button">あ</button>
-          <button class="btn btn-large success" data-toggle="button">あ</button>
-          <button class="btn btn-large success" data-toggle="button">あ</button>
-          <button class="btn btn-large success" data-toggle="button">あ</button>
-          <button class="btn btn-large success" data-toggle="button">あ</button>
-          <button class="btn btn-large success" data-toggle="button">あ</button>
-          <button class="btn btn-large success" data-toggle="button">あ</button>
-          <button class="btn btn-large success" data-toggle="button">あ</button>
-          <button class="btn btn-large success" data-toggle="button">あ</button>
-          <button class="btn btn-large success" data-toggle="button">あ</button>
-          <button class="btn btn-large success" data-toggle="button">あ</button>
-          <button class="btn btn-large success" data-toggle="button">あ</button>
-          <button class="btn btn-large success" data-toggle="button">あ</button>
-          <button class="btn btn-large success" data-toggle="button">←</button>
-        </div><!-- /button-toolbar -->
-        <div class="btn-toolbar">
-          <button class="btn btn-large success" data-toggle="button">あ</button>
-          <button class="btn btn-large success" data-toggle="button">あ</button>
-          <button class="btn btn-large success" data-toggle="button">あ</button>
-          <button class="btn btn-large success" data-toggle="button">あ</button>
-          <button class="btn btn-large success" data-toggle="button">あ</button>
-          <button class="btn btn-large success" data-toggle="button">あ</button>
-          <button class="btn btn-large success" data-toggle="button">あ</button>
-          <button class="btn btn-large success" data-toggle="button">あ</button>
-          <button class="btn btn-large success" data-toggle="button">あ</button>
-          <button class="btn btn-large success" data-toggle="button">あ</button>
-          <button class="btn btn-large success" data-toggle="button">あ</button>
-          <button class="btn btn-large success" data-toggle="button">あ</button>
-          <button class="btn btn-large success" data-toggle="button">あ</button>
-          <button class="btn btn-large success" data-toggle="button">→</button>
-        </div><!-- /button-toolbar -->
-      </p>
+      <canvas id="gamecanvas" width="700" height="200"></canvas><p></p>
+      {% if turn_player %}
+      <input type="text" class="span7 disabled" name="word" id="id_word" autocomplete="off">
+      <button type="submit" class="pull-right span2 btn btn-large btn-primary disabled">しりとり</button>
+      {% else %}
+      <form action="/game/{{ game_player.id }}/add/" method="post">
+        {% csrf_token %}
+        <input type="text" class="span7" name="word" id="id_word" autocomplete="off">
+        <button type="submit" class="pull-right span2 btn btn-large btn-primary">しりとり</button>
+      </form>
+      {% endif %}
     </div><!-- /span9 -->
     <div class="span3 player-list">
+      {% if turn_player %}
+      <div class="alert alert-info">It's {{ turn_player }}'s turn</div>
+      {% else %}
+      <div class="alert">It's your turn</div>
+      {% endif %}
       <h3>Players in this room</h3>
       <p><i class="icon-user"></i><span class="you">{{ player.name }} さん</span></p>
       {% if player_list %}
@@ -92,11 +78,36 @@
 <script src="/static/js/jquery-1.7.1.min.js"></script>
 <script src="/static/js/bootstrap.min.js"></script>
 <script type="text/javascript">
-// 680 * 400
-var c = document.getElementById("gamecanvas");
-var ctx = c.getContext("2d");
-ctx.fillStyle = "#dff0d8";
-ctx.fillRect(0, 0, 680, 400);
+function printcanvas() {
+  var c = document.getElementById("gamecanvas");
+  var ctx = c.getContext("2d");
+  ctx.fillStyle = "#dff0d8";
+  ctx.fillRect(0, 0, 700, 200);
+  ctx.fillStyle = "#333";
+  ctx.font = "bold 24px sans-serif";
+  {% for his in history %}
+  ctx.fillText("{{ his.word.hiragana }} {{ his.word.midashigo }}", 10, {{ forloop.counter }}*30);
+  {% endfor %}
+}
+
+function checkupdate(hisLength) {
+  $.ajax({
+    type: 'GET',
+    url: "/game/{{ game_player.id }}/check/{{ history|length }}/",
+    success: function(data){
+      console.log(data);
+      if (data.updated) {
+        window.location.href = "/game/{{ game_player.id }}/";
+      }
+    }
+  });
+}
+
+$(document).ready(function(){
+  var interval = setInterval("checkupdate()", 6000);
+  checkupdate();
+  printcanvas();
+});
 </script>
 </body>
 </html>

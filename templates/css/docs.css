@@ -139,12 +139,16 @@ hr.soften {
   -webkit-border-radius: 3px;
      -moz-border-radius: 3px;
           border-radius: 3px;
-  min-height: 30px;
-  line-height: 30px;
+}
+.game .span7 {
+  min-height: 43px;
 }
 .player-list h3,
 .player-list p {
   margin: 15px;
+}
+.player-list .alert {
+  margin: 10px;
 }
 .you {
   color: #46a546;

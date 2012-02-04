@@ -8,6 +8,8 @@ urlpatterns = patterns('',
     url(r'^newgame/$', 'games.views.new_game'),
     url(r'^newgame/create/$', 'games.views.create_game'),
     url(r'^game/(?P<game_player_id>\d+)/$', 'games.views.open_game'),
+    url(r'^game/(?P<game_player_id>\d+)/add/$', 'games.views.add_word'),
+    url(r'^game/(?P<game_player_id>\d+)/check/(?P<history_len>\d+)/$', 'games.views.check_update'),
 
     # Uncomment the admin/doc line below to enable admin documentation:
     # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
