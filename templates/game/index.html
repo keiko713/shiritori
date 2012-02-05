@@ -43,7 +43,7 @@
       <div class="gamecanvas">
         {% for his in history %}
         <div class="gameword{%if forloop.first %} gameword-first{% endif %}">
-          <div class="wordleft">{{ his.word.hiragana }}</div>&nbsp;
+          <div class="wordleft"{%if forloop.first %} id="id_wordleft_first"{% endif %}>{{ his.word.hiragana }}</div>&nbsp;
           <div class="wordright">{{ his.word.midashigo }} by {{ his.player.name }}</div>
         </div><!-- /gameword -->
         {% endfor %}
@@ -103,7 +103,17 @@ function checkupdate(hisLength) {
 $(document).ready(function(){
   var interval = setInterval("checkupdate()", 6000);
   checkupdate();
+  lastLetter();
 });
+
+function lastLetter() {
+  var node = document.getElementById("id_wordleft_first");
+  word = node.innerHTML;
+  last = word.slice(-1);
+  lastHtml = '<span style="color: #F89406;">' + last + '</span>';
+  word = word.slice(0, -1) + lastHtml;
+  node.innerHTML = word;
+}
 </script>
 </body>
 </html>

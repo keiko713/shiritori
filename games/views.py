@@ -150,6 +150,9 @@ def add_word(request, game_player_id):
                             last_letter = JAPANESE_KOMOJI[last_letter]
                         if word[0] != last_letter:
                             error_message = last_word + " and " + word + " are not connected!"
+                    # end with "ん" check
+                    if word[-1] == u"ん":
+                        error_message = "Game Over!"
 
     if not error_message:
         his = GameHistory(game=game, player=player, word=dic_word[0])
