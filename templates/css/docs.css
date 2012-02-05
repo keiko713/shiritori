@@ -140,9 +140,6 @@ hr.soften {
      -moz-border-radius: 3px;
           border-radius: 3px;
 }
-.game .span7 {
-  min-height: 43px;
-}
 .player-list h3,
 .player-list p {
   margin: 15px;
@@ -152,6 +149,38 @@ hr.soften {
 }
 .you {
   color: #46a546;
+}
+.gamecanvas {
+  background: #DFF0D8;
+  padding: 10px 0px 10 0px;
+  margin: 0 0 20px;
+  width: 100%;
+  height: 200px;
+  overflow: auto;
+  position: relative;
+}
+.gameword {
+  padding: 0 0 0 15px;
+  margin: 0 10px 10px 10px;
+  border-left: 5px solid #FFC40D;
+  border-bottom: 1px dotted #CCC;
+  font-size: 16px;
+  font-weight: 300;
+  line-height: 22.5px;
+}
+.gameword-first {
+  border-left: 5px solid #f89406;
+}
+.gameword .wordleft {
+  float: left;
+}
+.gameword .wordright {
+  float: right;
+  color: #999999;
+}
+.gameinput .span7 {
+  min-height: 43px;
+  float: left;
 }
 
 /* Footer

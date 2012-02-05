@@ -89,7 +89,7 @@ def open_game(request, game_player_id):
     game_player = get_object_or_404(GamePlayer, pk=game_player_id)
     player = get_object_or_404(Player, pk=game_player.player.id)
     game = get_object_or_404(Game, pk=game_player.game.id)
-    history = GameHistory.objects.filter(game=game)
+    history = GameHistory.objects.filter(game=game).order_by('-pk')
     gps = GamePlayer.objects.filter(game=game)
     player_list = []
     turn_player = None
@@ -160,7 +160,7 @@ def add_word(request, game_player_id):
             game.current_turn = 0
         game.save()
 
-    history = GameHistory.objects.filter(game=game)
+    history = GameHistory.objects.filter(game=game).order_by('-pk')
     gps = GamePlayer.objects.filter(game=game)
     player_list = []
     turn_player = None

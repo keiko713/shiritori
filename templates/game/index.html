@@ -40,17 +40,26 @@
   {% endif %}
   <div class="row">
     <div class="span9">
-      <canvas id="gamecanvas" width="700" height="200"></canvas><p></p>
+      <div class="gamecanvas">
+        {% for his in history %}
+        <div class="gameword{%if forloop.first %} gameword-first{% endif %}">
+          <div class="wordleft">{{ his.word.hiragana }}</div>&nbsp;
+          <div class="wordright">{{ his.word.midashigo }} by {{ his.player.name }}</div>
+        </div><!-- /gameword -->
+        {% endfor %}
+      </div><!-- /gamecanvas -->
+      <div class="gameinput">
       {% if turn_player %}
-      <input type="text" class="span7 disabled" name="word" id="id_word" autocomplete="off">
+      <input type="text" class="span7 disabled" name="word" id="id_word" autocomplete="off">&nbsp;
       <button type="submit" class="pull-right span2 btn btn-large btn-primary disabled">しりとり</button>
       {% else %}
       <form action="/game/{{ game_player.id }}/add/" method="post">
         {% csrf_token %}
-        <input type="text" class="span7" name="word" id="id_word" autocomplete="off">
+        <input type="text" class="span7" name="word" id="id_word" autocomplete="off">&nbsp;
         <button type="submit" class="pull-right span2 btn btn-large btn-primary">しりとり</button>
       </form>
       {% endif %}
+      </div><!-- /gameinput -->
     </div><!-- /span9 -->
     <div class="span3 player-list">
       {% if turn_player %}
@@ -78,18 +87,6 @@
 <script src="/static/js/jquery-1.7.1.min.js"></script>
 <script src="/static/js/bootstrap.min.js"></script>
 <script type="text/javascript">
-function printcanvas() {
-  var c = document.getElementById("gamecanvas");
-  var ctx = c.getContext("2d");
-  ctx.fillStyle = "#dff0d8";
-  ctx.fillRect(0, 0, 700, 200);
-  ctx.fillStyle = "#333";
-  ctx.font = "bold 24px sans-serif";
-  {% for his in history %}
-  ctx.fillText("{{ his.word.hiragana }} {{ his.word.midashigo }}", 10, {{ forloop.counter }}*30);
-  {% endfor %}
-}
-
 function checkupdate(hisLength) {
   $.ajax({
     type: 'GET',
@@ -106,7 +103,6 @@ function checkupdate(hisLength) {
 $(document).ready(function(){
   var interval = setInterval("checkupdate()", 6000);
   checkupdate();
-  printcanvas();
 });
 </script>
 </body>
