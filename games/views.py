@@ -21,12 +21,7 @@ JAPANESE_KOMOJI = {
 }
 
 def get_ongoing_games_num():
-    ongoing_games = Game.objects.filter(finish_date=None)
-    game_number = 0
-    if ongoing_games:
-        game_number = len(ongoing_games)
-    return game_number
-
+    return len(Game.objects.filter(finish_date=None))
 
 def index(request):
     error_message = None 
