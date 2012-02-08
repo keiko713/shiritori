@@ -1,6 +1,6 @@
 <html>
 <head>
-<title>New Game | SHIRItori</title>
+<title>404 Page Not Found | SHIRItori</title>
 <link href="{{ STATIC_URL }}css/bootstrap.min.css" rel="stylesheet">
 <link href="{{ STATIC_URL }}css/bootstrap-responsive.min.css" rel="stylesheet">
 <link href="{{ STATIC_URL }}css/docs.css" rel="stylesheet">
@@ -16,7 +16,7 @@
         <li class="">
           <a href="/">Home</a>
         </li>
-        <li class="active">
+        <li class="">
           <a href="/newgame/">New Game</a>
         </li>
       </ul>
@@ -26,29 +26,11 @@
 </div><!-- /navbar -->
 
 <div class="container">
-<header class="jumbotron subhead">
-  <h1>Create New Game</h1>
-  <p class="lead">新しいしりとりゲームをつくるよ</p>
+<header class="jumbotron masthead">
+  <div class="inner">
+    <p><img src="{{ STATIC_URL }}img/404.png"></p>
+  </div><!-- /inner -->
 </header>
-
-<hr>
-
-<div class="new-game">
-  <div class="alert alert-info">
-    現在 {{ game_number }} 個のゲームが進行中だよ！
-  </div><!-- /alert info -->
-  {% if error_message %}
-  <div class="alert alert-error">
-    {{ error_message }}
-  </div><!-- /alert error -->
-  {% endif %}
-  <form class="well form-inline" action="/newgame/create/" method="post">
-    {% csrf_token %}
-    <label>Choose your name: </label>
-    <input type="text" name="player_name" class="span3" placeholder="Name">
-    <button type="submit" class="btn btn-primary">Create New Game</button>
-  </form>
-</div><!-- /new-game -->
 
 <footer class="footer">
   <p class="pull-right"><a href="#">Back to top</a></p>
