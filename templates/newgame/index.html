@@ -1,30 +1,11 @@
-<html>
-<head>
-<title>New Game | SHIRItori</title>
-<link href="{{ STATIC_URL }}css/bootstrap.min.css" rel="stylesheet">
-<link href="{{ STATIC_URL }}css/bootstrap-responsive.min.css" rel="stylesheet">
-<link href="{{ STATIC_URL }}css/docs.css" rel="stylesheet">
-</head>
-<body data-spy="scroll" data-target=".subnav" data-offset="50">
-<!-- Navbar -->
-<div class="navbar navbar-fixed-top">
-  <div class="navbar-inner">
-    <div class="container">
-      <a class="brand" href="/"><img src="{{ STATIC_URL }}img/logo_small_white.png"></a>
-      <div class="nav-collapse">
-      <ul class="nav">
-        <li class="">
-          <a href="/">Home</a>
-        </li>
-        <li class="active">
-          <a href="/newgame/">New Game</a>
-        </li>
-      </ul>
-      </div><!-- /nav-collapse -->
-    </div><!-- /container -->
-  </div><!-- /navbar-inner -->
-</div><!-- /navbar -->
+{% extends "base.html" %}
 
+{% block title %}New Game | {% endblock title %}
+
+{% block active_home %}{% endblock active_home %}
+{% block active_newgame %}active{% endblock active_newgame %}
+
+{% block container %}
 <div class="container">
 <header class="jumbotron subhead">
   <h1>Create New Game</h1>
@@ -49,14 +30,7 @@
     <button type="submit" class="btn btn-primary">Create New Game</button>
   </form>
 </div><!-- /new-game -->
+{% endblock container %}
 
-<footer class="footer">
-  <p class="pull-right"><a href="#">Back to top</a></p>
-</footer>
-</div><!-- /container -->
-
-<!-- JavaScript -->
-<script src="{{ STATIC_URL }}js/jquery-1.7.1.min.js"></script>
-<script src="{{ STATIC_URL }}js/bootstrap.min.js"></script>
-</body>
-</html>
+{% block custom_js %}
+{% endblock custom_js %}
