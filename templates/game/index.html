@@ -30,31 +30,37 @@
         {% endfor %}
       </div><!-- /gamecanvas -->
       <div class="gameinput">
-      {% if turn_player %}
-      <input type="text" class="span7 disabled" name="word" id="id_word" autocomplete="off">&nbsp;
-      <button type="submit" class="pull-right span2 btn btn-large btn-primary disabled">しりとり</button>
-      {% else %}
+      {% if turn_player == player %}
       <form action="/game/{{ game_player.id }}/add/" method="post">
         {% csrf_token %}
         <input type="text" class="span7" name="word" id="id_word" autocomplete="off">&nbsp;
         <button type="submit" class="pull-right span2 btn btn-large btn-primary">しりとり</button>
       </form>
+      {% else %}
+      <input type="text" class="span7 disabled" name="word" id="id_word" autocomplete="off">&nbsp;
+      <button type="submit" class="pull-right span2 btn btn-large btn-primary disabled">しりとり</button>
       {% endif %}
       </div><!-- /gameinput -->
     </div><!-- /span9 -->
     <div class="span3 player-list">
-      {% if turn_player %}
-      <div class="alert alert-info">It's {{ turn_player }}'s turn</div>
-      {% else %}
+      {% if turn_player.id == player.id %}
       <div class="alert">It's your turn</div>
+      {% else %}
+      <div class="alert alert-info">It's {{ turn_player.name }}'s turn</div>
       {% endif %}
       <h3>Players in this room</h3>
-      <p><i class="icon-user"></i><span class="you">{{ player.name }} さん</span></p>
-      {% if player_list %}
       {% for x in player_list %}
-      <p><i class="icon-user"></i>{{ x.name }} さん</p>
+      <p>
+        {% if x.id == player.id %}
+        <i class="icon-user"></i>&nbsp;<span class="you">{{ x.name }} さん</span>
+        <span class="pull-right"><i class="icon-leaf"></i></span><br>
+        <a href="/game/{{ game_player.id }}/leave/" class="pull-right"><i class="icon-home"></i>&nbsp;leave this room</a><br>
+        {% else %}
+        <i class="icon-user"></i>&nbsp;{{ x.name }} さん
+        <span class="pull-right"><i class="icon-leaf"></i></span><br>
+        {% endif %}
+      </p>
       {% endfor %}
-      {% endif %}
     </div><!-- /span3 -->
   </div><!-- /row -->
 </div><!-- /game -->
@@ -65,7 +71,7 @@
 function checkupdate(hisLength) {
   $.ajax({
     type: 'GET',
-    url: "/game/{{ game_player.id }}/check/{{ history|length }}/",
+    url: "/game/{{ game_player.id }}/check/{{ history|length }}/{{ player_list|length }}/",
     success: function(data){
       console.log(data);
       if (data.updated) {

@@ -1,12 +1,19 @@
 from django.db import models
 
 class Game(models.Model):
+    # turn_num=-1: this game is deleted
     current_turn = models.IntegerField(default=0)
     create_date = models.DateTimeField(auto_now_add=True)
     finish_date = models.DateTimeField(blank=True, null=True)
 
+    def __unicode__(self):
+        return u'%s (%s, %s, %s)' % (self.id, self.current_turn, self.create_date, self.finish_date)
+
 class Player(models.Model):
     name = models.CharField(max_length=10)
+
+    def __unicode__(self):
+        return u'%s' % (self.name)
 
 class Word(models.Model):
     hiragana = models.CharField(max_length=50)
@@ -17,6 +24,7 @@ class Word(models.Model):
 class GamePlayer(models.Model):
     game = models.ForeignKey(Game)
     player = models.ForeignKey(Player)
+    # turn_num=-1: this player left this game
     turn_num = models.IntegerField(default=0)
     elapse_time = models.BigIntegerField(default=0)
     won = models.BooleanField(default=False)
