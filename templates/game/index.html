@@ -85,14 +85,21 @@ $(document).ready(function(){
   var interval = setInterval("checkupdate()", 6000);
   checkupdate();
   lastLetter();
+  document.forms[0].word.focus();
 });
 
 function lastLetter() {
   var node = document.getElementById("id_wordleft_first");
   word = node.innerHTML;
   last = word.slice(-1);
-  lastHtml = '<span style="color: #F89406;">' + last + '</span>';
-  word = word.slice(0, -1) + lastHtml;
+  if (last == "ー") {
+    last2 = word.slice(-2, -1);
+    lastHtml = '<span style="color: #F89406;">' + last2 + '</span>';
+    word = word.slice(0, -2) + lastHtml + last;
+  } else {
+    lastHtml = '<span style="color: #F89406;">' + last + '</span>';
+    word = word.slice(0, -1) + lastHtml;
+  }
   node.innerHTML = word;
 }
 </script>
