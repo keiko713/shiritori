@@ -166,7 +166,7 @@ def add_word(request, game_player_id):
                         if JAPANESE_KOMOJI.get(last_letter, False):
                             last_letter = JAPANESE_KOMOJI[last_letter]
                         if dic_word.hiragana[0] != last_letter:
-                            error_message = last_word + " and " + dic_word.word + " are not connected!"
+                            error_message = last_word + " and " + dic_word.hiragana + " are not connected!"
                     # end with "ん" check
                     if dic_word.hiragana[-1] == u"ん":
                         error_message = "Game Over!"
