@@ -6,7 +6,7 @@ admin.autodiscover()
 urlpatterns = patterns('',
     url(r'^$', 'games.views.index'),
     url(r'^newgame/$', 'games.views.new_game'),
-    url(r'^newgame/create/$', 'games.views.create_game'),
+    url(r'^newgame/join/(?P<game_player_id>\d+)/$', 'games.views.join_game'),
     url(r'^game/(?P<game_player_id>\d+)/$', 'games.views.open_game'),
     url(r'^game/(?P<game_player_id>\d+)/add/$', 'games.views.add_word'),
     url(r'^game/(?P<game_player_id>\d+)/check/(?P<history_len>\d+)/(?P<player_num>\d+)/$', 'games.views.check_update'),

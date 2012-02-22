@@ -51,32 +51,26 @@ def index(request):
 
 
 def new_game(request):
+    error_message = None
+    if request.method == 'POST':
+        name = request.POST.get('player_name', False)
+        if name:
+            player = Player(name=name)
+            player.save()
+            game = Game()
+            game.save()
+            game_player = GamePlayer(game=game, player=player)
+            game_player.save()
+            return HttpResponseRedirect(reverse('games.views.open_game', args=(game_player.id,)))
+        else:
+            error_message = "Name is required!"    
+
     # get ongoing games
     game_number = len(Game.objects.filter(finish_date=None).exclude(current_turn=-1))
+
     return render_to_response('newgame/index.html', {
         'game_number': game_number,
-    }, context_instance=RequestContext(request))
-
-
-def create_game(request):
-    name = request.POST.get('player_name', False)
-    if not name:
-        game_number = len(Game.objects.filter(finish_date=None).exclude(current_turn=-1))
-        return render_to_response('newgame/index.html', {
-                'game_number': game_number,
-                'error_message': "Name is required!",
-        }, context_instance=RequestContext(request))
-            
-    player = Player(name=name)
-    player.save()
-    game = Game()
-    game.save()
-    game_player = GamePlayer(game=game, player=player)
-    game_player.save()
-    return render_to_response('newgame/created.html', {
-        'player_name': player.name,
-        'game_id': game.id,
-        'game_player_id': game_player.id,
+        'error_message': error_message,
     }, context_instance=RequestContext(request))
 
 
@@ -98,6 +92,11 @@ def open_game(request, game_player_id):
         if game.current_turn == gp.turn_num:
             turn_player = gp.player
 
+    error_message = None
+    player_hist = GameHistory.objects.filter(game=game, player=player)
+    if not player_hist:
+        error_message = "Welcome to New Game!"
+
     return render_to_response('game/index.html', {
         'game_player': game_player,
         'player': player,
@@ -105,6 +104,7 @@ def open_game(request, game_player_id):
         'history': history,
         'player_list': player_list,
         'turn_player': turn_player,
+        'error_message': error_message,
     }, context_instance=RequestContext(request))
 
 def add_word(request, game_player_id):
@@ -249,3 +249,26 @@ def leave_room(request, game_player_id):
     game_player.turn_num = -1
     game_player.save()
     return HttpResponseRedirect(reverse('games.views.index'))
+
+
+def join_game(request, game_player_id):
+    error_message = None
+    game_player = get_object_or_404(GamePlayer, pk=game_player_id)
+    if request.method == 'POST':
+        name = request.POST.get('player_name', False)
+        if name:
+            player = Player(name=name)
+            player.save()
+            game = game_player.game 
+            gps = GamePlayer.objects.filter(game=game).exclude(turn_num=-1)
+            game_player = GamePlayer(game=game, player=player, turn_num=len(gps))
+            game_player.save()
+            return HttpResponseRedirect(reverse('games.views.open_game', args=(game_player.id,)))
+        error_message = "Name is required to join the game!"
+
+    owner_name = game_player.player.name
+    return render_to_response('newgame/join.html', {
+        'owner_name': owner_name,
+        'game_player_id': game_player_id,
+        'error_message': error_message,
+    }, context_instance=RequestContext(request))

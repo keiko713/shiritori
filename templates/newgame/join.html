@@ -1,33 +1,30 @@
 {% extends "base.html" %}
 
-{% block title %}New Game | {% endblock title %}
+{% block title %}Join Game | {% endblock title %}
 
 {% block active_home %}{% endblock active_home %}
-{% block active_newgame %}active{% endblock active_newgame %}
+{% block active_newgame %}{% endblock active_newgame %}
 
 {% block container %}
 <div class="container">
 <header class="jumbotron subhead">
-  <h1>Create New Game</h1>
-  <p class="lead">新しいしりとりゲームをつくるよ</p>
+  <h1>Join Friend's Game</h1>
+  <p class="lead">{{ owner_name }} さんのゲームに参加するよ</p>
 </header>
 
 <hr>
 
 <div class="new-game">
-  <div class="alert alert-info">
-    現在 {{ game_number }} 個のゲームが進行中だよ！
-  </div><!-- /alert info -->
   {% if error_message %}
   <div class="alert alert-error">
     {{ error_message }}
   </div><!-- /alert error -->
   {% endif %}
-  <form class="well form-inline" action="/newgame/" method="post">
+  <form class="well form-inline" action="/newgame/join/{{ game_player_id }}/" method="post">
     {% csrf_token %}
     <label>Choose your name: </label>
     <input type="text" name="player_name" class="span3" placeholder="Name">
-    <button type="submit" class="btn btn-primary">Create New Game</button>
+    <button type="submit" class="btn btn-primary">Join The Game</button>
   </form>
 </div><!-- /new-game -->
 {% endblock container %}
