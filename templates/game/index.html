@@ -61,13 +61,28 @@
         {% endif %}
       </p>
       {% endfor %}
+      <hr>
+      <h3>Invite your friend</h3>
+      <p>
+        Link for join page<br>
+        <i class="icon-file" id="icon-file"></i>&nbsp;<input type="text" class="input-join" value="http://playshiritori.com/newgame/join/{{ game_player.id }}/" disabled>
+      </p>
     </div><!-- /span3 -->
   </div><!-- /row -->
 </div><!-- /game -->
 {% endblock container %}
 
 {% block custom_js %}
+<script src="{{ STATIC_URL }}js/bootstrap-tooltip.js"></script>
 <script type="text/javascript">
+$("#icon-file").tooltip({
+  placement: "left",
+  title: "Click to select the URL",
+});
+$("#icon-file").click(function(){
+  $(".input-join").select();
+});
+
 function checkupdate(hisLength) {
   $.ajax({
     type: 'GET',

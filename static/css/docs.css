@@ -182,6 +182,16 @@ hr.soften {
   min-height: 43px;
   float: left;
 }
+input[disabled].input-join {
+  width: 170px;
+  min-height: 25px;
+  margin-top: 5px;
+  margin-bottom: 0px;
+  cursor: default;
+}
+.player-list .icon-file {
+  margin-top: 3px;
+}
 
 /* Footer
 -------------------------------------------------- */
