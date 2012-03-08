@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block title %}You logged in!{% endblock title %}
+
+{% block active_home %}{% endblock active_home %}
+{% block active_newgame %}{% endblock active_newgame %}
+
+{% block container %}
+<div class="container">
+<header class="jumbotron masthead">
+  <div class="inner">
+    <p><img src="{{ STATIC_URL }}img/title.png"></p>
+    <p>みんなでしりとりして遊ぼう！</p>
+  </div><!-- /inner -->
+</header>
+Welcome {{ user.username }}!
+{% endblock container %}
+
+{% block custom_js %}
+{% endblock custom_js %}

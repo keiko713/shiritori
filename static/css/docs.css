@@ -24,6 +24,16 @@ hr.soften {
 .navbar .brand {
     padding: 5px 20px 5px;
 }
+/* Navbar */
+.navbar .nav {
+    float: none;
+}
+
+/* UserBox */
+.navbar .nav .user-box {
+    float: right;
+}
+
 
 /* Jumbotrons
 -------------------------------------------------- */

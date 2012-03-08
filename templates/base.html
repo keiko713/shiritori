@@ -1,6 +1,7 @@
 <html>
 <head>
 <title>{% block title %}{% endblock title %}SHIRItori</title>
+<link href="{{ STATIC_URL }}img/icon_small.ico" rel="shortcut icon">
 <link href="{{ STATIC_URL }}css/bootstrap.min.css" rel="stylesheet">
 <link href="{{ STATIC_URL }}css/bootstrap-responsive.min.css" rel="stylesheet">
 <link href="{{ STATIC_URL }}css/docs.css" rel="stylesheet">
@@ -25,13 +26,27 @@
     <div class="container">
       <a class="brand" href="/"><img src="{{ STATIC_URL }}img/logo_small_white.png"></a>
       <div class="nav-collapse">
-      <ul class="nav">
+      <ul class="nav" id="tab">
         <li class="{% block active_home %}{% endblock active_home %}">
           <a href="/">Home</a>
         </li>
         <li class="{% block active_newgame %}{% endblock active_newgame %}">
           <a href="/newgame/">New Game</a>
         </li>
+        {% if user.is_authenticated %}
+        <li class="user-box dropdown" id="id-user-box">
+          <a class="dropdown-toggle" data-toggle="dropdown" href="#id-user-box">
+            {{ user.username }}&nbsp;<b class="caret"></b>
+          </a>
+          <ul class="dropdown-menu">
+            <li><a href="/logout/">Log Out</a></li>
+          </ul>
+        </li>
+        {% else %}
+        <li class="user-box">
+          <a href="/login-form/">Log In</a>
+        </li>
+        {% endif %}
       </ul>
       </div><!-- /nav-collapse -->
     </div><!-- /container -->
@@ -42,12 +57,30 @@
 {% endblock container %}
 
 <footer class="footer">
+  <ul>
+    <li>
+      <a href="{% url socialauth_begin 'twitter' %}">Enter using Twitter</a>
+    </li>
+    <li>
+      <a href="{% url socialauth_begin 'facebook' %}">Enter using Facebook</a>
+    </li>
+    <li>
+      <a href="{% url socialauth_begin 'google-oauth2' %}">Enter using Google OAuth2</a>
+    </li>
+  </ul>
   <p class="pull-right"><a href="#">Back to top</a></p>
 </footer>
 </div><!-- /container -->
 
 <!-- JavaScript -->
 <script src="{{ STATIC_URL }}js/jquery-1.7.1.min.js"></script>
+<script src="{{ STATIC_URL }}js/bootstrap-tooltip.js"></script>
+<script src="{{ STATIC_URL }}js/bootstrap-dropdown.js"></script>
+<script type="text/javascript">
+$(function() {
+  $('.dropdown-toggle').dropdown();
+});
+</script>
 {% block custom_js %}
 {% endblock custom_js %}
 </body>

@@ -7,6 +7,7 @@ from datetime import datetime
 from games.models import *
 from shiritori.extern import romkan
 from jcconv import *
+from social_auth import *
 import re
 import json
 
@@ -271,4 +272,12 @@ def join_game(request, game_player_id):
         'owner_name': owner_name,
         'game_player_id': game_player_id,
         'error_message': error_message,
+    }, context_instance=RequestContext(request))
+
+def logged_in(request):
+    #user = get_model()
+    #return render_to_response('logged_in.html', {
+    #    'user': user,
+    #}, context_instance=RequestContext(request))
+    return render_to_response('logged_in.html', {
     }, context_instance=RequestContext(request))
