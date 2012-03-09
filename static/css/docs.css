@@ -203,6 +203,20 @@ input[disabled].input-join {
   margin-top: 3px;
 }
 
+/* login */
+.loginnav {
+  padding-top: 10px;
+  margin: 0px;
+  list-style: none;
+}
+.loginnav li {
+  margin: 20px;
+}
+.login .span3 {
+  min-height: 30px;
+  line-height: 30px;
+}
+
 /* Footer
 -------------------------------------------------- */
 .footer {

@@ -8,6 +8,8 @@ from games.models import *
 from shiritori.extern import romkan
 from jcconv import *
 from social_auth import *
+from django.contrib.auth.models import User
+from django.contrib.auth import authenticate, login
 import re
 import json
 
@@ -274,10 +276,59 @@ def join_game(request, game_player_id):
         'error_message': error_message,
     }, context_instance=RequestContext(request))
 
+
 def logged_in(request):
-    #user = get_model()
-    #return render_to_response('logged_in.html', {
-    #    'user': user,
-    #}, context_instance=RequestContext(request))
     return render_to_response('logged_in.html', {
     }, context_instance=RequestContext(request))
+
+
+def login_form(request):
+    error_message = None
+    # if the user already logged in, redirect to top page
+    if request.user.is_authenticated():
+        return HttpResponseRedirect(reverse('games.views.index'))
+
+    if request.method == 'POST':
+        event = request.POST.get('event', False)
+        username = request.POST.get('username', False)
+        password = request.POST.get('password', False)
+        if event:
+            # make a new user
+            if event == 'new':
+                email = request.POST.get('email', '')
+                if username and password:
+                    try:
+                        u_exist = User.objects.get(username__exact=username)
+                        error_message = "User Name " + username + " is taken already. Please choose another one."
+                    except User.DoesNotExist:
+                        u = User.objects.create_user(username, email, password)
+                        u.save()
+                        user = authenticate(username=username, password=password)
+                        if user is not None:
+                            if user.is_active:
+                                login(request, user)
+                                return HttpResponseRedirect(reverse('games.views.index'))
+                            else:
+                                error_message = "Disabled account."
+                        else:
+                            error_message = "Making a new user failed. Please contact to an administrator."
+                else:
+                    error_message = "User Name and Password are required to make a new user."
+            # login
+            if event == 'login':
+                if username and password:
+                    user = authenticate(username=username, password=password)
+                    if user is not None:
+                        if user.is_active:
+                            login(request, user)
+                            return HttpResponseRedirect(reverse('games.views.index'))
+                        else:
+                            error_message = "Disabled account."
+                    else:
+                        error_message = "Incorrect username or password."
+                else:
+                    error_message = "User Name and Password are required."
+    return render_to_response('login_form.html', {
+        'error_message': error_message,
+    }, context_instance=RequestContext(request))
+

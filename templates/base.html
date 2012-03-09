@@ -1,6 +1,7 @@
 <html>
 <head>
 <title>{% block title %}{% endblock title %}SHIRItori</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link href="{{ STATIC_URL }}img/icon_small.ico" rel="shortcut icon">
 <link href="{{ STATIC_URL }}css/bootstrap.min.css" rel="stylesheet">
 <link href="{{ STATIC_URL }}css/bootstrap-responsive.min.css" rel="stylesheet">
@@ -44,7 +45,7 @@
         </li>
         {% else %}
         <li class="user-box">
-          <a href="/login-form/">Log In</a>
+          <a href="/login-form/">Login</a>
         </li>
         {% endif %}
       </ul>
@@ -57,17 +58,6 @@
 {% endblock container %}
 
 <footer class="footer">
-  <ul>
-    <li>
-      <a href="{% url socialauth_begin 'twitter' %}">Enter using Twitter</a>
-    </li>
-    <li>
-      <a href="{% url socialauth_begin 'facebook' %}">Enter using Facebook</a>
-    </li>
-    <li>
-      <a href="{% url socialauth_begin 'google-oauth2' %}">Enter using Google OAuth2</a>
-    </li>
-  </ul>
   <p class="pull-right"><a href="#">Back to top</a></p>
 </footer>
 </div><!-- /container -->
