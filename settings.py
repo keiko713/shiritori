@@ -175,5 +175,5 @@ GOOGLE_OAUTH2_CLIENT_ID      = ''
 GOOGLE_OAUTH2_CLIENT_SECRET  = ''
 
 LOGIN_URL          = '/login-form/'
-LOGIN_REDIRECT_URL = '/logged-in/'
+LOGIN_REDIRECT_URL = '/'
 LOGIN_ERROR_URL    = '/login-error/'

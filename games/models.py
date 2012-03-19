@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 class Game(models.Model):
     # turn_num=-1: this game is deleted
@@ -10,10 +11,12 @@ class Game(models.Model):
         return u'%s (%s, %s, %s)' % (self.id, self.current_turn, self.create_date, self.finish_date)
 
 class Player(models.Model):
+    user = models.ForeignKey(User)
+    # user.username is the default
     name = models.CharField(max_length=10)
 
     def __unicode__(self):
-        return u'%s' % (self.name)
+        return u'%s' % (name)
 
 class Word(models.Model):
     hiragana = models.CharField(max_length=50)
@@ -26,7 +29,7 @@ class GamePlayer(models.Model):
     player = models.ForeignKey(Player)
     # turn_num=-1: this player left this game
     turn_num = models.IntegerField(default=0)
-    elapse_time = models.BigIntegerField(default=0)
+    passes = models.IntegerField(default=0)
     won = models.BooleanField(default=False)
 
 class GameHistory(models.Model):

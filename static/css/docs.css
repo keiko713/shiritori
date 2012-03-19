@@ -216,6 +216,11 @@ input[disabled].input-join {
   min-height: 30px;
   line-height: 30px;
 }
+.errorlist {
+  list-style: none;
+  margin: 0;
+}
+
 
 /* Footer
 -------------------------------------------------- */

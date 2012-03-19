@@ -7,7 +7,7 @@ class GameAdmin(admin.ModelAdmin):
 admin.site.register(Game, GameAdmin)
 
 class PlayerAdmin(admin.ModelAdmin):
-    list_display = ('name',)
+    list_display = ('user', 'name')
 
 admin.site.register(Player, PlayerAdmin)
 
@@ -17,7 +17,7 @@ class WordAdmin(admin.ModelAdmin):
 admin.site.register(Word, WordAdmin)
 
 class GamePlayerAdmin(admin.ModelAdmin):
-    list_display = ('game', 'player', 'turn_num', 'won')
+    list_display = ('game', 'player', 'turn_num', 'passes', 'won')
 
 admin.site.register(GamePlayer, GamePlayerAdmin)
 

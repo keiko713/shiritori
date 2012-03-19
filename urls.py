@@ -14,7 +14,6 @@ urlpatterns = patterns('',
 
     url(r'', include('social_auth.urls')),
     url(r'^login-form/$', 'games.views.login_form'),
-    url(r'^logged-in/$', 'games.views.logged_in'),
     url(r'^logout/$', 'django.contrib.auth.views.logout', 
         {'next_page': '/'}),
 

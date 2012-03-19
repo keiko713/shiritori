@@ -10,8 +10,15 @@ from jcconv import *
 from social_auth import *
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import REDIRECT_FIELD_NAME
+from django.views.decorators.cache import never_cache
+from django.views.decorators.csrf import csrf_protect
+from django.conf import settings
+from games.forms import *
 import re
 import json
+import urlparse
 
 JAPANESE_KOMOJI = {
     u"ぁ": u"あ",
@@ -53,6 +60,7 @@ def index(request):
     }, context_instance=RequestContext(request))
 
 
+@login_required
 def new_game(request):
     error_message = None
     if request.method == 'POST':
@@ -77,6 +85,7 @@ def new_game(request):
     }, context_instance=RequestContext(request))
 
 
+@login_required
 def open_game(request, game_player_id):
     game_player = get_object_or_404(GamePlayer, pk=game_player_id)
     if game_player.turn_num == -1:
@@ -110,6 +119,8 @@ def open_game(request, game_player_id):
         'error_message': error_message,
     }, context_instance=RequestContext(request))
 
+
+@login_required
 def add_word(request, game_player_id):
     game_player = get_object_or_404(GamePlayer, pk=game_player_id)
     player = get_object_or_404(Player, pk=game_player.player.id)
@@ -204,6 +215,7 @@ def add_word(request, game_player_id):
     }, context_instance=RequestContext(request))
 
 
+# For ajax and check update
 def check_update(request, game_player_id, history_len, player_num):
     game_player = get_object_or_404(GamePlayer, pk=game_player_id)
     gps = GamePlayer.objects.filter(game=game_player.game).exclude(turn_num=-1)
@@ -226,6 +238,7 @@ def json_response(data, code=200, mimetype='application/json'):
     return resp
 
 
+@login_required
 def leave_room(request, game_player_id):
     # need to think about the case that there is only one player
     game_player = get_object_or_404(GamePlayer, pk=game_player_id)
@@ -254,6 +267,7 @@ def leave_room(request, game_player_id):
     return HttpResponseRedirect(reverse('games.views.index'))
 
 
+@login_required
 def join_game(request, game_player_id):
     error_message = None
     game_player = get_object_or_404(GamePlayer, pk=game_player_id)
@@ -277,58 +291,68 @@ def join_game(request, game_player_id):
     }, context_instance=RequestContext(request))
 
 
-def logged_in(request):
-    return render_to_response('logged_in.html', {
-    }, context_instance=RequestContext(request))
-
-
+@csrf_protect
+@never_cache
 def login_form(request):
-    error_message = None
+    redirect_to = request.REQUEST.get(REDIRECT_FIELD_NAME, '')
+    netloc = urlparse.urlparse(redirect_to)[1]
+    # default event is login
+    event = 'login'
+    form1, form2 = None, None
+
+    # Use default setting if redirect_to is empty
+    if not redirect_to:
+        redirect_to = settings.LOGIN_REDIRECT_URL
+
+    # Security check -- don't allow redirection to a different
+    # host.
+    elif netloc and netloc != request.get_host():
+        redirect_to = settings.LOGIN_REDIRECT_URL
+
     # if the user already logged in, redirect to top page
     if request.user.is_authenticated():
-        return HttpResponseRedirect(reverse('games.views.index'))
+        return HttpResponseRedirect(redirect_to)
 
     if request.method == 'POST':
         event = request.POST.get('event', False)
-        username = request.POST.get('username', False)
-        password = request.POST.get('password', False)
+            
         if event:
             # make a new user
             if event == 'new':
-                email = request.POST.get('email', '')
-                if username and password:
-                    try:
-                        u_exist = User.objects.get(username__exact=username)
-                        error_message = "User Name " + username + " is taken already. Please choose another one."
-                    except User.DoesNotExist:
-                        u = User.objects.create_user(username, email, password)
-                        u.save()
-                        user = authenticate(username=username, password=password)
-                        if user is not None:
-                            if user.is_active:
-                                login(request, user)
-                                return HttpResponseRedirect(reverse('games.views.index'))
-                            else:
-                                error_message = "Disabled account."
-                        else:
-                            error_message = "Making a new user failed. Please contact to an administrator."
-                else:
-                    error_message = "User Name and Password are required to make a new user."
+                form1 = MyUserCreationForm(data=request.POST)
+                if form1.is_valid():
+                    form1.save()
+                    user = authenticate(username=form1.cleaned_data['username'],
+                        password=form1.cleaned_data['password2'])
+                    login(request, user)
+
+                    if request.session.test_cookie_worked():
+                        request.session.delete_test_cookie()
+
+                    return HttpResponseRedirect(redirect_to)
+
             # login
-            if event == 'login':
-                if username and password:
-                    user = authenticate(username=username, password=password)
-                    if user is not None:
-                        if user.is_active:
-                            login(request, user)
-                            return HttpResponseRedirect(reverse('games.views.index'))
-                        else:
-                            error_message = "Disabled account."
-                    else:
-                        error_message = "Incorrect username or password."
-                else:
-                    error_message = "User Name and Password are required."
+            elif event == 'login':
+                form2 = MyAuthenticationForm(data=request.POST)
+                if form2.is_valid():
+                    login(request, form2.get_user())
+
+                    if request.session.test_cookie_worked():
+                        request.session.delete_test_cookie()
+
+                    return HttpResponseRedirect(redirect_to)
+
+    if not form1:
+        form1 = MyUserCreationForm()
+    if not form2:
+        form2 = MyAuthenticationForm()
+
+    request.session.set_test_cookie()
+
     return render_to_response('login_form.html', {
-        'error_message': error_message,
+        'form1': form1,
+        'form2': form2,
+        'event': event,
+        'next': redirect_to,
     }, context_instance=RequestContext(request))
 
