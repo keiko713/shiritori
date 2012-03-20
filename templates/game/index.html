@@ -8,7 +8,7 @@
 {% block container %}
 <div class="container">
 <header class="jumbotron subhead">
-  <h1>Room {{ game.id }}</h1>
+  <h1>{{ game.roomname }}</h1>
 </header>
 
 <hr>
@@ -99,11 +99,17 @@ $(document).ready(function(){
   var interval = setInterval("checkupdate()", 6000);
   checkupdate();
   lastLetter();
-  document.forms[0].word.focus();
+  var form = document.forms[0];
+  if (form) {
+    form.word.focus();
+  }
 });
 
 function lastLetter() {
   var node = document.getElementById("id_wordleft_first");
+  if (!node) {
+    return;
+  }
   word = node.innerHTML;
   last = word.slice(-1);
   if (last == "ー") {

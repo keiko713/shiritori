@@ -28,19 +28,11 @@
     {% for gameplayers in gameplayers_list %}
     <div class="span3">
       <div class="rooms">
-      <h2>Room {{ gameplayers.0.game.id }}</h2>
+      <h2>{{ gameplayers.0.game.roomname }}</h2>
       {% for gameplayer in gameplayers %}
       <p><a href="/game/{{ gameplayer.id }}/"><i class="icon-user"></i> {{ gameplayer.player.name }} さん</a></p>
       {% endfor %}
-      <p style="cursor: hand;" onclick="show('jgf{{ gameplayers.0.game.id }}');" class="pull-right">join? <i class="icon-chevron-down" id="jgf{{ gameplayers.0.game.id }}_icon"></i></p><br>
-      <div class="joingame-form hide" id="jgf{{ gameplayers.0.game.id }}">
-        <form class="form-inline" action="/" method="post">
-        {% csrf_token %}
-        <input type="hidden" name="game_id" value="{{ gameplayers.0.game.id }}">
-        <input type="text" class="span2" placeholder="Name" name="player_name{{ gameplayers.0.game.id }}">
-        <button type="submit" class="btn btn-primary">join</button>
-        </form>
-      </div>
+      <a href="/newgame/join/{{ gameplayers.0.id }}/" class="pull-right">join this game? <i class="icon-chevron-right"></i></a><br>
       </div><!-- /rooms -->
     </div><!-- /span3 -->
     {% if forloop.counter|divisibleby:"4" %}
@@ -55,15 +47,4 @@
 {% endblock container %}
 
 {% block custom_js %}
-<script type="text/javascript">
-function show(id) {
-  if (document.getElementById(id).style.display == "block") {
-    document.getElementById(id).style.display = "none";
-    document.getElementById(id + "_icon").className = "icon-chevron-down";
-  } else {
-    document.getElementById(id).style.display = "block";
-    document.getElementById(id + "_icon").className = "icon-chevron-up";
-  }
-}
-</script>
 {% endblock custom_js %}

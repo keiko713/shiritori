@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.http import HttpResponse, HttpResponseRedirect, Http404
-from django.shortcuts import render_to_response, get_object_or_404
+from django.shortcuts import render_to_response, get_object_or_404, get_list_or_404
 from django.core.urlresolvers import reverse
 from django.template import RequestContext
 from datetime import datetime
@@ -62,26 +62,23 @@ def index(request):
 
 @login_required
 def new_game(request):
-    error_message = None
     if request.method == 'POST':
-        name = request.POST.get('player_name', False)
-        if name:
-            player = Player(name=name)
-            player.save()
-            game = Game()
-            game.save()
+        form = NewGameForm(data=request.POST)
+        if form.is_valid():
+            player = get_list_or_404(Player, user=request.user)[0]
+            game = form.save()
             game_player = GamePlayer(game=game, player=player)
             game_player.save()
             return HttpResponseRedirect(reverse('games.views.open_game', args=(game_player.id,)))
-        else:
-            error_message = "Name is required!"    
+    else:
+        form = NewGameForm()
 
     # get ongoing games
     game_number = len(Game.objects.filter(finish_date=None).exclude(current_turn=-1))
 
     return render_to_response('newgame/index.html', {
         'game_number': game_number,
-        'error_message': error_message,
+        'form': form,
     }, context_instance=RequestContext(request))
 
 
@@ -267,28 +264,28 @@ def leave_room(request, game_player_id):
     return HttpResponseRedirect(reverse('games.views.index'))
 
 
-@login_required
 def join_game(request, game_player_id):
-    error_message = None
     game_player = get_object_or_404(GamePlayer, pk=game_player_id)
-    if request.method == 'POST':
-        name = request.POST.get('player_name', False)
-        if name:
-            player = Player(name=name)
-            player.save()
-            game = game_player.game 
+    if request.user.is_authenticated():
+        player = get_list_or_404(Player, user=request.user)[0]
+        game = game_player.game 
+        # this player is already in the room?
+        check_gps = GamePlayer.objects.filter(game=game, player=player)
+        if check_gps:
+            my_game_player = check_gps[0]
+        else:
             gps = GamePlayer.objects.filter(game=game).exclude(turn_num=-1)
-            game_player = GamePlayer(game=game, player=player, turn_num=len(gps))
-            game_player.save()
-            return HttpResponseRedirect(reverse('games.views.open_game', args=(game_player.id,)))
-        error_message = "Name is required to join the game!"
+            my_game_player = GamePlayer(game=game, player=player, turn_num=len(gps))
+            my_game_player.save()
 
-    owner_name = game_player.player.name
-    return render_to_response('newgame/join.html', {
-        'owner_name': owner_name,
-        'game_player_id': game_player_id,
-        'error_message': error_message,
-    }, context_instance=RequestContext(request))
+        return HttpResponseRedirect(reverse('games.views.open_game', args=(my_game_player.id,)))
+    else:
+        # show the static page that lead invited user to the login page
+        owner_name = game_player.player.name
+        return render_to_response('newgame/join.html', {
+            'owner_name': owner_name,
+            'game_player_id': game_player_id,
+        }, context_instance=RequestContext(request))
 
 
 @csrf_protect
@@ -325,7 +322,9 @@ def login_form(request):
                     user = authenticate(username=form1.cleaned_data['username'],
                         password=form1.cleaned_data['password2'])
                     login(request, user)
-
+                    # make the Player object at the same time
+                    player = Player(user=user, name=user.username)
+                    player.save()
                     if request.session.test_cookie_worked():
                         request.session.delete_test_cookie()
 

@@ -18,16 +18,14 @@
   <div class="alert alert-info">
     現在 {{ game_number }} 個のゲームが進行中だよ！
   </div><!-- /alert info -->
-  {% if error_message %}
-  <div class="alert alert-error">
-    {{ error_message }}
-  </div><!-- /alert error -->
-  {% endif %}
-  <form class="well form-inline" action="/newgame/" method="post">
+  <form class="form-horizontal" action="/newgame/" method="post">
     {% csrf_token %}
-    <label>Choose your name: </label>
-    <input type="text" name="player_name" class="span3" placeholder="Name">
-    <button type="submit" class="btn btn-primary">Create New Game</button>
+    <fieldset>
+    {{ form.as_bootstrap_horizontal }}
+    <div class="form-actions">
+      <button type="submit" class="btn btn-primary">Create New Game</button>
+    </div>
+    </fieldset>
   </form>
 </div><!-- /new-game -->
 {% endblock container %}

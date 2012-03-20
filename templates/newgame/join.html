@@ -9,23 +9,13 @@
 <div class="container">
 <header class="jumbotron subhead">
   <h1>Join Friend's Game</h1>
-  <p class="lead">{{ owner_name }} さんのゲームに参加するよ</p>
+  <p class="lead">ログインして {{ owner_name }} さんのゲームに参加しよう！</p>
 </header>
 
 <hr>
 
-<div class="new-game">
-  {% if error_message %}
-  <div class="alert alert-error">
-    {{ error_message }}
-  </div><!-- /alert error -->
-  {% endif %}
-  <form class="well form-inline" action="/newgame/join/{{ game_player_id }}/" method="post">
-    {% csrf_token %}
-    <label>Choose your name: </label>
-    <input type="text" name="player_name" class="span3" placeholder="Name">
-    <button type="submit" class="btn btn-primary">Join The Game</button>
-  </form>
+<div class="new-game well">
+  <a href="/login-form/?next=/newgame/join/{{ game_player_id }}/" class="btn btn-primary btn-large">Login and Join The Game</a>
 </div><!-- /new-game -->
 {% endblock container %}
 

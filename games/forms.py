@@ -4,7 +4,9 @@ from django.utils.html import conditional_escape
 from django.utils.encoding import force_unicode
 from django.utils.safestring import mark_safe
 from django.forms.forms import BoundField
+from django.forms.widgets import CheckboxInput
 from django import forms
+from games.models import *
 
 class BootstrapOutputMixin:
 
@@ -52,7 +54,16 @@ class BootstrapOutputMixin:
                 # for controls div tag
                 output.append(u'<div class="controls">')
                 # input tag, textarea tag, etc...
-                output.append(unicode(bf))
+                if isinstance(field.widget,CheckboxInput):
+                    output.append(u'<label class="checkbox">')
+                    output.append(unicode(bf))
+                    if field.help_text:
+                        output.append(force_unicode(field.help_text))
+                    output.append(u'</label>')
+                else: 
+                    output.append(unicode(bf))
+                    if field.help_text:
+                        output.append(u'<p class="help-block">%s</p>' % force_unicode(field.help_text))
 
                 # for error
                 if bf.errors:
@@ -113,11 +124,29 @@ class MyAuthenticationForm(AuthenticationForm, BootstrapOutputMixin):
         'class': 'span3',
         'placeholder': 'Password',
     }
-    username = forms.CharField(label=_("Username"), max_length=30,
+    username = forms.CharField(label=_("User Name"), max_length=30,
         widget=forms.TextInput(attrs=username_attrs))
     password = forms.CharField(label=_("Password"),
         widget=forms.PasswordInput(attrs=password_attrs))
 
     def __init__(self, request=None, *args, **kwargs):
         AuthenticationForm.__init__(self, request=None, *args, **kwargs)
+
+
+class NewGameForm(forms.ModelForm, BootstrapOutputMixin):
+    roomname_attrs = {
+        'class': 'span3',
+        'placeholder': 'Room Name',
+    }
+    # TODO remove required=False from each attrs, that's for test
+    roomname = forms.CharField(label=_("Room Name"), max_length=30,
+        widget=forms.TextInput(attrs=roomname_attrs), required=False)
+    rule = forms.CharField(label=_("Rule"), max_length=10,
+        widget=forms.Select(choices=RULE_CHOICES))
+    private = forms.BooleanField(label=_("Private"),
+        help_text=_("Make this room private"), required=False)
+
+    class Meta:
+        model = Game
+        fields = ('roomname', 'rule', 'private')
 
