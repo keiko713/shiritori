@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.http import HttpResponse, HttpResponseRedirect, Http404
-from django.shortcuts import render_to_response, get_object_or_404, get_list_or_404
+from django.shortcuts import render_to_response, get_object_or_404
 from django.core.urlresolvers import reverse
 from django.template import RequestContext
 from datetime import datetime
@@ -65,7 +65,14 @@ def new_game(request):
     if request.method == 'POST':
         form = NewGameForm(data=request.POST)
         if form.is_valid():
-            player = get_list_or_404(Player, user=request.user)[0]
+            players = Player.objects.filter(user=request.user)
+            if players:
+                player = players[0]
+            else:
+                # the case that player logged in using social auth,
+                # player is not made yet
+                player = Player(user=request.user, name=request.user.username)
+                player.save()
             game = form.save()
             game_player = GamePlayer(game=game, player=player)
             game_player.save()
@@ -267,7 +274,14 @@ def leave_room(request, game_player_id):
 def join_game(request, game_player_id):
     game_player = get_object_or_404(GamePlayer, pk=game_player_id)
     if request.user.is_authenticated():
-        player = get_list_or_404(Player, user=request.user)[0]
+        players = Player.objects.filter(user=request.user)
+        if players:
+            player = players[0]
+        else:
+            # the case that player logged in using social auth,
+            # player is not made yet
+            player = Player(user=request.user, name=request.user.username)
+            player.save()
         game = game_player.game 
         # this player is already in the room?
         check_gps = GamePlayer.objects.filter(game=game, player=player)

@@ -30,9 +30,17 @@
       <div class="rooms">
       <h2>{{ gameplayers.0.game.roomname }}</h2>
       {% for gameplayer in gameplayers %}
+      {% if gameplayer.player.user == user %}
       <p><a href="/game/{{ gameplayer.id }}/"><i class="icon-user"></i> {{ gameplayer.player.name }} さん</a></p>
+      {% else %}
+      <p><i class="icon-user"></i> {{ gameplayer.player.name }} さん</p>
+      {% endif %}
       {% endfor %}
+      {% if gameplayers.0.game.private %}
+      <span class="pull-right">private room <i class="icon-lock"></i></span><br>
+      {% else %}
       <a href="/newgame/join/{{ gameplayers.0.id }}/" class="pull-right">join this game? <i class="icon-chevron-right"></i></a><br>
+      {% endif %}
       </div><!-- /rooms -->
     </div><!-- /span3 -->
     {% if forloop.counter|divisibleby:"4" %}

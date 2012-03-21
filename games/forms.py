@@ -136,7 +136,7 @@ class MyAuthenticationForm(AuthenticationForm, BootstrapOutputMixin):
 class NewGameForm(forms.ModelForm, BootstrapOutputMixin):
     roomname_attrs = {
         'class': 'span3',
-        'placeholder': 'Room Name',
+        'placeholder': 'Room Name (Optional)',
     }
     # TODO remove required=False from each attrs, that's for test
     roomname = forms.CharField(label=_("Room Name"), max_length=30,
