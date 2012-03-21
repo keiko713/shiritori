@@ -28,7 +28,7 @@
     {% for gameplayers in gameplayers_list %}
     <div class="span3">
       <div class="rooms">
-      <h2>{{ gameplayers.0.game.roomname }}</h2>
+      <h3>{{ gameplayers.0.game.roomname }}</h3>
       {% for gameplayer in gameplayers %}
       {% if gameplayer.player.user == user %}
       <p><a href="/game/{{ gameplayer.id }}/"><i class="icon-user"></i> {{ gameplayer.player.name }} さん</a></p>
@@ -37,9 +37,9 @@
       {% endif %}
       {% endfor %}
       {% if gameplayers.0.game.private %}
-      <span class="pull-right">private room <i class="icon-lock"></i></span><br>
+      <p class="pull-right">private room <i class="icon-lock"></i></p>
       {% else %}
-      <a href="/newgame/join/{{ gameplayers.0.id }}/" class="pull-right">join this game? <i class="icon-chevron-right"></i></a><br>
+      <p class="pull-right"><a href="/newgame/join/{{ gameplayers.0.id }}/">join this game? <i class="icon-chevron-right"></i></a></p>
       {% endif %}
       </div><!-- /rooms -->
     </div><!-- /span3 -->

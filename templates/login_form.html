@@ -32,8 +32,8 @@
     </div><!-- /left-side span6 -->
     <div class="span6" id="form2">
       <h3 id="login_title">Log in with SHIRItori account</h3>
-      <p style="cursor: hand;" class="pull-right" onclick="create();" id="change_msg">Create a new SHIRItori account?&nbsp;<i class="icon-chevron-down"></i></p>
-      <form class="form-horizontal" action="/login-form/" method="post">
+      <p style="cursor: hand;" class="pull-right" onclick="create();" id="change_msg"><strong style="color: #f89406;">Create a new SHIRItori account?</strong>&nbsp;<i class="icon-chevron-down"></i></p>
+      <form class="form-horizontal login-form" action="/login-form/" method="post">
         {% csrf_token %}
         <fieldset>
         {{ form2.as_bootstrap_horizontal }}
@@ -47,8 +47,9 @@
     </div><!-- /right-side span6 form2 -->
     <div class="span6" id="form1" style="display: none;">
       <h3 id="login_title">Create a new account</h3>
-      <p style="cursor: hand;" class="pull-right" onclick="create();" id="change_msg">Log in with SHIRItori account?&nbsp;<i class="icon-chevron-up"></i></p>
-      <form class="form-horizontal" action="/login-form/" method="post">
+      <p style="cursor: hand;" class="pull-right" onclick="create();" id="change_msg"><strong>Log in with SHIRItori account?</strong>&nbsp;<i class="icon-chevron-up"></i></p>
+      <br class="clear" />
+      <form class="form-horizontal login-form" action="/login-form/" method="post">
         {% csrf_token %}
         <fieldset>
         {{ form1.as_bootstrap_horizontal }}
