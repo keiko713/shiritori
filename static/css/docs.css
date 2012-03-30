@@ -223,3 +223,11 @@ input[disabled].input-join {
   margin-bottom: 0;
   color: #555;
 }
+
+/* for Responsive */
+@media (max-width: 980px) {
+  body {
+    padding-top: 0;
+  }
+}
+
